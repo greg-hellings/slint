@@ -36,7 +36,10 @@ cfg-if = "1"
 derive_more = { workspace = true }
 lyon_path = { workspace = true }
 pin-weak = "1"
-femtovg = { version = "0.23.2", default-features = false, features = ["swash"] }
+# Pull femtovg from git to pick up an unreleased fix for a panic that
+# triggers in slintpad. Revert to a published crates.io version once a
+# release with the fix is published.
+femtovg = { git = "https://github.com/femtovg/femtovg.git", branch = "master", default-features = false, features = ["swash"] }
 imgref = { version = "1.6.1" }
 rgb = { version = "0.8.27" }
 
