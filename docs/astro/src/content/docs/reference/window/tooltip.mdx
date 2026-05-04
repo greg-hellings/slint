@@ -1,0 +1,199 @@
+---
+title: ToolTip
+description: ToolTip element api.
+---
+
+import SlintProperty from '@slint/common-files/src/components/SlintProperty.astro';
+
+```slint playground
+import { Button } from "std-widgets.slint";
+
+export component Example inherits Window {
+    width: 280px;
+    height: 160px;
+
+    VerticalLayout {
+        alignment: center;
+
+        Button {
+            text: "Hover me";
+
+            ToolTip {
+                text: "This is a tooltip";
+            }
+        }
+    }
+}
+```
+
+Use `ToolTip` to show a small popup when the **parent** element is hovered. The tooltip appears while the mouse is over that parent and hides when the pointer leaves.
+
+You can show a plain string with the `text` property, or build **custom** content by nesting a single root element (for example a `Rectangle` or layout) inside `ToolTip` instead of using `text`. Put any extra widgets inside that root.
+
+A parent element may have **at most one** `ToolTip` child. Multiple `ToolTip` siblings under the same element are rejected at compile time.
+
+## Properties
+
+### text
+
+<SlintProperty propName="text" typeName="string">
+The text shown in the tooltip.
+
+If you set `text`, the `ToolTip` must not have any children.
+
+```slint
+Button {
+    text: "Save";
+
+    ToolTip {
+        text: "Save the current file";
+    }
+}
+```
+</SlintProperty>
+
+### delay
+
+<SlintProperty propName="delay" typeName="duration" defaultValue="500ms">
+Delay before the tooltip is shown after hover starts. Use a larger value to avoid showing tooltips when the pointer only passes over a control.
+
+```slint playground
+import { Button } from "std-widgets.slint";
+
+export component Example inherits Window {
+    width: 280px;
+    height: 160px;
+
+    VerticalLayout {
+        alignment: center;
+
+        Button {
+            text: "Slow tooltip";
+
+            ToolTip {
+                delay: 700ms;
+                text: "Appears after the pointer rests briefly";
+            }
+        }
+    }
+}
+```
+</SlintProperty>
+
+### placement
+
+<SlintProperty propName="placement" typeName="enum" enumName="ToolTipPlacement" defaultValue="pointer">
+Controls where the tooltip is placed relative to the pointer or the hovered element.
+
+- `pointer`: placed using the pointer position when the tooltip is shown (default). It stays fixed while visible and does not move with subsequent pointer motion over the parent.
+- `top` / `bottom` / `left` / `right`: anchored outside the corresponding side of the hovered element.
+
+```slint playground
+import { Button } from "std-widgets.slint";
+
+export component Example inherits Window {
+    width: 280px;
+    height: 160px;
+
+    VerticalLayout {
+        alignment: center;
+        spacing: 24px;
+
+        Button {
+            text: "Pointer";
+
+            ToolTip {
+                placement: pointer;
+                text: "Shown near the cursor when it appears";
+            }
+        }
+
+        Button {
+            text: "Bottom";
+
+            ToolTip {
+                placement: bottom;
+                text: "Anchored below the button";
+            }
+        }
+    }
+}
+```
+</SlintProperty>
+
+## Custom content
+
+When you need rich layout (multiple lines, shortcut chips, colors), omit `text` and provide **one** child widget that wraps everything. Add your own background, padding, and `VerticalLayout` / `HorizontalLayout` as needed. The popup is shrink-wrapped to that content for placement.
+
+:::note[Note]
+
+For custom tooltips, use one outer element as the root and place the rest of the UI inside it (`Rectangle`, `VerticalLayout`, and similar).
+
+:::
+
+```slint playground
+import { Button } from "std-widgets.slint";
+
+export component Example inherits Window {
+    width: 320px;
+    height: 220px;
+
+    VerticalLayout {
+        alignment: center;
+
+        Button {
+            text: "Custom tooltip";
+
+            ToolTip {
+                placement: pointer;
+
+                Rectangle {
+                    border-radius: 8px;
+                    background: #1f2937;
+
+                    VerticalLayout {
+                        padding: 10px;
+                        spacing: 6px;
+
+                        Text {
+                            text: "Save document";
+                            color: #fff;
+                            font-weight: 600;
+                        }
+
+                        Text {
+                            text: "Press the shortcut to save.";
+                            color: #d1d5db;
+                            wrap: word-wrap;
+                        }
+
+                        HorizontalLayout {
+                            spacing: 4px;
+
+                            Rectangle {
+                                border-radius: 4px;
+                                background: #374151;
+
+                                HorizontalLayout {
+                                    padding: 4px 6px;
+                                    Text { text: "Ctrl"; color: #fff; font-size: 12px; }
+                                }
+                            }
+
+                            Rectangle {
+                                border-radius: 4px;
+                                background: #374151;
+
+                                HorizontalLayout {
+                                    padding: 4px 6px;
+                                    Text { text: "S"; color: #fff; font-size: 12px; }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
