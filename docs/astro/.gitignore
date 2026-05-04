@@ -50,6 +50,7 @@ pnpm-debug.log*
 /src/content/docs/reference/window/dialog.mdx
 /src/content/docs/reference/window/menubar.mdx
 /src/content/docs/reference/window/contextmenuarea.mdx
+/src/content/docs/reference/window/systemtrayicon.mdx
 /src/content/docs/reference/timer.mdx
 /src/content/docs/reference/global-namespaces/platform.mdx
 
